@@ -1,5 +1,7 @@
 # Nepal Sambat Calendar for Vue 3
 
+> **Note**: This project is currently in the testing phase. Contributions, feedback, and suggestions are warmly welcomed to enhance its functionality and user experience.
+
 A Vue 3 component for displaying and converting dates to the Nepal Sambat calendar system.
 
 ## Installation
@@ -18,7 +20,7 @@ npm install nepal-sambat
 </template>
 
 <script setup>
-import { NepalSambatCalendar } from 'nepal-sambat';
+import { NepalSambatCalendar } from 'nepal-sambat'
 </script>
 ```
 
@@ -30,22 +32,22 @@ import { NepalSambatCalendar } from 'nepal-sambat';
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { NepalSambatCalendar } from 'nepal-sambat';
+import { ref } from 'vue'
+import { NepalSambatCalendar } from 'nepal-sambat'
 
-const customDate = ref(new Date('2024-03-14'));
+const customDate = ref(new Date('2024-03-14'))
 </script>
 ```
 
 ### Using Conversion Functions
 
 ```typescript
-import { convertToNSDate } from 'nepal-sambat';
+import { convertToNSDate } from 'nepal-sambat'
 
-const date = new Date('2024-03-14');
-const nsDate = convertToNSDate(date);
+const date = new Date('2024-03-14')
+const nsDate = convertToNSDate(date)
 
-console.log(nsDate);
+console.log(nsDate)
 // {
 //   nsYear: 1144,
 //   month: {
@@ -80,9 +82,9 @@ console.log(nsDate);
 
 ## Props
 
-| Prop  | Type   | Default     | Description                    |
-|-------|--------|-------------|--------------------------------|
-| date  | Date   | new Date()  | Date to convert to NS calendar |
+| Prop | Type | Default    | Description                    |
+| ---- | ---- | ---------- | ------------------------------ |
+| date | Date | new Date() | Date to convert to NS calendar |
 
 ## Development
 
@@ -102,4 +104,4 @@ npm test
 
 ## License
 
-MIT 
+MIT
