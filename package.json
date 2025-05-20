@@ -16,7 +16,7 @@
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
     "type-check": "vue-tsc --noEmit",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
     "format": "prettier --write src/"
   },
   "keywords": [
@@ -35,9 +35,11 @@
   "devDependencies": {
     "@types/node": "^20.17.48",
     "@vitejs/plugin-vue": "^5.2",
+    "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "0.7.0",
     "eslint": "9.27.0",
     "eslint-plugin-vue": "10.1.0",
+    "jsdom": "^26.1.0",
     "prettier": "3.5.3",
     "typescript": "5.8.3",
     "vite": "6.3.5",
