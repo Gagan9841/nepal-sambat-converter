@@ -1,0 +1,47 @@
+{
+  "name": "nepal-sambat",
+  "version": "1.0.0",
+  "description": "A Vue 3 component for Nepal Sambat calendar conversion",
+  "type": "module",
+  "main": "dist/nepal-sambat.umd.js",
+  "module": "dist/nepal-sambat.es.js",
+  "types": "dist/types/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "format": "prettier --write src/"
+  },
+  "keywords": [
+    "nepal-sambat",
+    "calendar",
+    "vue3",
+    "typescript",
+    "nepal-sambat-converter",
+    "AD to NS"
+  ],
+  "author": "Gagan Acharya",
+  "license": "MIT",
+  "peerDependencies": {
+    "vue": "^3.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.48",
+    "@vitejs/plugin-vue": "^5.2",
+    "@vue/tsconfig": "0.7.0",
+    "eslint": "9.27.0",
+    "eslint-plugin-vue": "10.1.0",
+    "prettier": "3.5.3",
+    "typescript": "5.8.3",
+    "vite": "6.3.5",
+    "vite-plugin-dts": "4.5.4",
+    "vitest": "3.1.3",
+    "vue-tsc": "2.2.10"
+  }
+}
