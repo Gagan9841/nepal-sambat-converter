@@ -2,6 +2,8 @@
 
 > **Note**: This project is currently in the testing phase. Contributions, feedback, and suggestions are warmly welcomed to enhance its functionality and user experience.
 
+> The date conversion and astronomical calculations in this component are heavily based on the methodologies outlined in https://nsapi.spiralogics.net/nsalgorithm.pdf.
+
 A Vue 3 component for displaying and converting dates to the Nepal Sambat calendar system.
 
 ## Installation
