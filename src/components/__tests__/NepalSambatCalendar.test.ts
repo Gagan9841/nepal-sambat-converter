@@ -12,9 +12,9 @@ describe('NepalSambatCalendar', () => {
     const testDate = new Date('2024-03-14')
     const wrapper = mount(NepalSambatCalendar, {
       props: {
-        date: testDate
-      }
+        date: testDate,
+      },
     })
-    expect(wrapper.props('date')).toBe(testDate)
+    expect(wrapper.vm.date).toBe(testDate)
   })
-}) 
+})

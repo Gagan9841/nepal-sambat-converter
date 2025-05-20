@@ -12,22 +12,26 @@ import { convertToNSDate, formatNSDate } from '../calendar/conversion'
 
 export default defineComponent({
   name: 'NepalSambatCalendar',
+  props: {
+    date: {
+      type: Date,
+      default: () => new Date(),
+    },
+  },
   data() {
     return {
-      date: null as any,
+      internalDate: null as any,
     }
   },
   mounted() {
-    // Example: Load today's date
-    const today = new Date()
-    this.loadDate(today.getFullYear(), today.getMonth() + 1, today.getDate())
+    this.loadDate(this.date.getFullYear(), this.date.getMonth() + 1, this.date.getDate())
   },
   methods: {
     loadDate(year: number, month: number, day: number) {
-      this.date = convertToNSDate(year, month, day)
+      this.internalDate = convertToNSDate(year, month, day)
     },
     getFormattedDate() {
-      return this.date ? formatNSDate(this.date) : ''
+      return this.internalDate ? formatNSDate(this.internalDate) : ''
     },
   },
 })
