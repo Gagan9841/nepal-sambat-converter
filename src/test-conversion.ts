@@ -7,7 +7,7 @@ import {
 } from './calendar/conversion'
 
 // Test case 1: Convert January 6, 2025
-const today = new Date(2025, 5, 28)
+const today = new Date()
 const date = convertToNSDate(today.getFullYear(), today.getMonth() + 1, today.getDate())
 console.log(formatNSDate(date)) // Expected: "1145 पोहेला थ्व तृतीया - 3"
 

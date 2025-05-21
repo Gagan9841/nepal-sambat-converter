@@ -37,7 +37,7 @@ import { NepalSambatCalendar } from 'nepal-sambat'
 import { ref } from 'vue'
 import { NepalSambatCalendar } from 'nepal-sambat'
 
-const customDate = ref(new Date('2024-03-14'))
+const customDate = ref(new Date(2024, 3, 14))
 </script>
 ```
 

@@ -6,6 +6,7 @@ import {
   KATHMANDU_LAT,
   KATHMANDU_LON,
   RAD_TO_DEG,
+  LUNAR_SYNODIC_MONTH,
 } from '../constants/values'
 
 /**
@@ -187,82 +188,98 @@ export function findNextNewMoonJD(jd: number): number {
  * - Constants are aligned with the document's 1980.0 epoch for consistency.
  */
 export function findLastNewMoonJD(jd: number): number {
-  const LUNAR_SYNODIC_MONTH = 29.530588861
-  const DEG_TO_RAD = Math.PI / 180
+  // const LUNAR_SYNODIC_MONTH = 29.530588861
+  // const DEG_TO_RAD = Math.PI / 180
 
-  // Constants from document (Section IV.C, Equation 4.5)
-  const NEW_MOON_REF_JD = 2415020.75933 // Reference new moon (J1900)
+  // // Constants from document (Section IV.C, Equation 4.5)
+  // const NEW_MOON_REF_JD = 2415020.75933 // Reference new moon (J1900)
 
-  // Estimate lunar cycle index k
-  const t = (jd - 2451545.0) / 36525 // Julian centuries since J2000
-  const k = Math.floor((jd / 365.25 + (1 - 1) / 12 - 1900) * 12.3685) // Approximate cycles since 1900
+  // // Estimate lunar cycle index k
+  // const t = (jd - 2451545.0) / 36525 // Julian centuries since J2000
+  // const k = Math.floor((jd / 365.25 + (1 - 1) / 12 - 1900) * 12.3685) // Approximate cycles since 1900
 
-  // Calculate mean new moon for cycle k
-  let meanNewMoonJD = NEW_MOON_REF_JD + k * LUNAR_SYNODIC_MONTH
+  // // Calculate mean new moon for cycle k
+  // let meanNewMoonJD = NEW_MOON_REF_JD + k * LUNAR_SYNODIC_MONTH
 
-  // Apply corrections (Equation 4.5)
-  const M = (359.2242 + 29.10535608 * k - 0.0000333 * t * t - 0.00000347 * t * t * t) % 360 // Solar mean anomaly
-  const M_m = (306.0253 + 385.81691806 * k + 0.0107306 * t * t + 0.00001236 * t * t * t) % 360 // Lunar mean anomaly
-  const F = (21.2964 + 390.67050646 * k - 0.0016528 * t * t - 0.00000239 * t * t * t) % 360 // Argument of latitude
+  // // Apply corrections (Equation 4.5)
+  // const M = (359.2242 + 29.10535608 * k - 0.0000333 * t * t - 0.00000347 * t * t * t) % 360 // Solar mean anomaly
+  // const M_m = (306.0253 + 385.81691806 * k + 0.0107306 * t * t + 0.00001236 * t * t * t) % 360 // Lunar mean anomaly
+  // const F = (21.2964 + 390.67050646 * k - 0.0016528 * t * t - 0.00000239 * t * t * t) % 360 // Argument of latitude
 
-  let correction = 0
-  correction += (0.1734 - 0.000393 * t) * Math.sin(M * DEG_TO_RAD)
-  correction += 0.0021 * Math.sin(2 * M * DEG_TO_RAD)
-  correction -= 0.4068 * Math.sin(M_m * DEG_TO_RAD)
-  correction += 0.0161 * Math.sin(2 * M_m * DEG_TO_RAD)
-  correction -= 0.0004 * Math.sin(3 * M_m * DEG_TO_RAD)
-  correction += 0.0104 * Math.sin(2 * F * DEG_TO_RAD)
-  correction -= 0.0051 * Math.sin((M + M_m) * DEG_TO_RAD)
-  correction -= 0.0074 * Math.sin((M - M_m) * DEG_TO_RAD)
-  correction += 0.0004 * Math.sin((2 * F + M) * DEG_TO_RAD)
-  correction -= 0.0004 * Math.sin((2 * F - M) * DEG_TO_RAD)
-  correction -= 0.0006 * Math.sin((2 * F + M_m) * DEG_TO_RAD)
-  correction += 0.001 * Math.sin((2 * F - M_m) * DEG_TO_RAD)
-  correction += 0.0005 * Math.sin((M + 2 * M_m) * DEG_TO_RAD)
+  // let correction = 0
+  // correction += (0.1734 - 0.000393 * t) * Math.sin(M * DEG_TO_RAD)
+  // correction += 0.0021 * Math.sin(2 * M * DEG_TO_RAD)
+  // correction -= 0.4068 * Math.sin(M_m * DEG_TO_RAD)
+  // correction += 0.0161 * Math.sin(2 * M_m * DEG_TO_RAD)
+  // correction -= 0.0004 * Math.sin(3 * M_m * DEG_TO_RAD)
+  // correction += 0.0104 * Math.sin(2 * F * DEG_TO_RAD)
+  // correction -= 0.0051 * Math.sin((M + M_m) * DEG_TO_RAD)
+  // correction -= 0.0074 * Math.sin((M - M_m) * DEG_TO_RAD)
+  // correction += 0.0004 * Math.sin((2 * F + M) * DEG_TO_RAD)
+  // correction -= 0.0004 * Math.sin((2 * F - M) * DEG_TO_RAD)
+  // correction -= 0.0006 * Math.sin((2 * F + M_m) * DEG_TO_RAD)
+  // correction += 0.001 * Math.sin((2 * F - M_m) * DEG_TO_RAD)
+  // correction += 0.0005 * Math.sin((M + 2 * M_m) * DEG_TO_RAD)
 
-  let newMoonJD = meanNewMoonJD + correction
+  // let newMoonJD = meanNewMoonJD + correction
 
-  // Ensure we get the *last* new moon (JD <= input jd)
-  if (newMoonJD > jd) {
-    const prevK = k - 1
-    meanNewMoonJD = NEW_MOON_REF_JD + prevK * LUNAR_SYNODIC_MONTH
-    const prevM =
-      (359.2242 + 29.10535608 * prevK - 0.0000333 * t * t - 0.00000347 * t * t * t) % 360
-    const prevM_m =
-      (306.0253 + 385.81691806 * prevK + 0.0107306 * t * t + 0.00001236 * t * t * t) % 360
-    const prevF =
-      (21.2964 + 390.67050646 * prevK - 0.0016528 * t * t - 0.00000239 * t * t * t) % 360
+  // // Ensure we get the *last* new moon (JD <= input jd)
+  // if (newMoonJD > jd) {
+  //   const prevK = k - 1
+  //   meanNewMoonJD = NEW_MOON_REF_JD + prevK * LUNAR_SYNODIC_MONTH
+  //   const prevM =
+  //     (359.2242 + 29.10535608 * prevK - 0.0000333 * t * t - 0.00000347 * t * t * t) % 360
+  //   const prevM_m =
+  //     (306.0253 + 385.81691806 * prevK + 0.0107306 * t * t + 0.00001236 * t * t * t) % 360
+  //   const prevF =
+  //     (21.2964 + 390.67050646 * prevK - 0.0016528 * t * t - 0.00000239 * t * t * t) % 360
 
-    correction = 0
-    correction += (0.1734 - 0.000393 * t) * Math.sin(prevM * DEG_TO_RAD)
-    correction += 0.0021 * Math.sin(2 * prevM * DEG_TO_RAD)
-    correction -= 0.4068 * Math.sin(prevM_m * DEG_TO_RAD)
-    correction += 0.0161 * Math.sin(2 * prevM_m * DEG_TO_RAD)
-    correction -= 0.0004 * Math.sin(3 * prevM_m * DEG_TO_RAD)
-    correction += 0.0104 * Math.sin(2 * prevF * DEG_TO_RAD)
-    correction -= 0.0051 * Math.sin((prevM + prevM_m) * DEG_TO_RAD)
-    correction -= 0.0074 * Math.sin((prevM - prevM_m) * DEG_TO_RAD)
-    correction += 0.0004 * Math.sin((2 * prevF + prevM) * DEG_TO_RAD)
-    correction -= 0.0004 * Math.sin((2 * prevF - prevM) * DEG_TO_RAD)
-    correction -= 0.0006 * Math.sin((2 * prevF + prevM_m) * DEG_TO_RAD)
-    correction += 0.001 * Math.sin((2 * prevF - M_m) * DEG_TO_RAD)
-    correction += 0.0005 * Math.sin((prevM + 2 * prevM_m) * DEG_TO_RAD)
+  //   correction = 0
+  //   correction += (0.1734 - 0.000393 * t) * Math.sin(prevM * DEG_TO_RAD)
+  //   correction += 0.0021 * Math.sin(2 * prevM * DEG_TO_RAD)
+  //   correction -= 0.4068 * Math.sin(prevM_m * DEG_TO_RAD)
+  //   correction += 0.0161 * Math.sin(2 * prevM_m * DEG_TO_RAD)
+  //   correction -= 0.0004 * Math.sin(3 * prevM_m * DEG_TO_RAD)
+  //   correction += 0.0104 * Math.sin(2 * prevF * DEG_TO_RAD)
+  //   correction -= 0.0051 * Math.sin((prevM + prevM_m) * DEG_TO_RAD)
+  //   correction -= 0.0074 * Math.sin((prevM - prevM_m) * DEG_TO_RAD)
+  //   correction += 0.0004 * Math.sin((2 * prevF + prevM) * DEG_TO_RAD)
+  //   correction -= 0.0004 * Math.sin((2 * prevF - prevM) * DEG_TO_RAD)
+  //   correction -= 0.0006 * Math.sin((2 * prevF + prevM_m) * DEG_TO_RAD)
+  //   correction += 0.001 * Math.sin((2 * prevF - M_m) * DEG_TO_RAD)
+  //   correction += 0.0005 * Math.sin((prevM + 2 * prevM_m) * DEG_TO_RAD)
 
-    newMoonJD = meanNewMoonJD + correction
-  }
+  //   newMoonJD = meanNewMoonJD + correction
+  // }
 
-  // Iterative refinement for higher precision
-  let testJD = newMoonJD
-  for (let i = 0; i < 10; i++) {
+  // // Iterative refinement for higher precision
+  // let testJD = newMoonJD
+  // for (let i = 0; i < 10; i++) {
+  //   const lunarLong = getLunarLongitude(testJD)
+  //   const solarLong = getSolarLongitude(testJD)
+  //   const elongation = (lunarLong - solarLong + 360) % 360
+  //   if (Math.abs(elongation) < 0.01) break // Converged
+  //   const prevJD = testJD - 0.01
+  //   const prevElong = (getLunarLongitude(prevJD) - getSolarLongitude(prevJD) + 360) % 360
+  //   const slope = (elongation - prevElong) / 0.01
+  //   testJD -= elongation / slope // Linear interpolation
+  // }
+
+  // return testJD
+  let testJD = jd
+  for (let i = 0; i < 30 * 24; i++) {
+    // Search up to 30 days back
+    testJD -= 1 / 24 // 1-hour steps backward
     const lunarLong = getLunarLongitude(testJD)
     const solarLong = getSolarLongitude(testJD)
     const elongation = (lunarLong - solarLong + 360) % 360
-    if (Math.abs(elongation) < 0.01) break // Converged
-    const prevJD = testJD - 0.01
-    const prevElong = (getLunarLongitude(prevJD) - getSolarLongitude(prevJD) + 360) % 360
-    const slope = (elongation - prevElong) / 0.01
-    testJD -= elongation / slope // Linear interpolation
+    if (elongation < 0.5) {
+      // Linear interpolation for sub-hour precision
+      const nextJD = testJD + 1 / 24
+      const nextElong = (getLunarLongitude(nextJD) - getSolarLongitude(nextJD) + 360) % 360
+      const slope = (nextElong - elongation) / (1 / 24)
+      return testJD - elongation / slope
+    }
   }
-
-  return testJD
+  return jd - LUNAR_SYNODIC_MONTH
 }

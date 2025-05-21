@@ -6,6 +6,7 @@ import {
   getSolarLongitude,
   getLunarLongitude,
   findNextNewMoonJD,
+  findLastNewMoonJD,
 } from '../astronomy/calculations'
 
 /**
@@ -21,8 +22,9 @@ import {
  *
  * If no match is found, the function defaults to returning the first month.
  */
-export function calculateNSMonth(jd: number): number {
-  const solarLong = getSolarLongitude(jd)
+function calculateNSMonth(jd: number): number {
+  const lastNewMoonJD = findLastNewMoonJD(jd)
+  const solarLong = getSolarLongitude(lastNewMoonJD)
 
   for (let i = 0; i < NS_MONTHS.length; i++) {
     const nextIdx = (i + 1) % NS_MONTHS.length
@@ -36,7 +38,7 @@ export function calculateNSMonth(jd: number): number {
     }
   }
 
-  return 1
+  return 1 // Default to first month if no match
 }
 
 /**
@@ -154,12 +156,14 @@ export function convertToTithi(year: number, month: number, day: number): NSTith
   const jd = gregorianToJD(year, month, day)
   const tithi = calculateTithi(jd)
   const adjustedTithi = ((tithi - 1) % 15) + 1
+  const paksha = tithi <= 15 ? 'थ्व' : 'गा'
+  const name = adjustedTithi === 15 && paksha === 'गा' ? 'अम्माई' : TITHI_NAMES[adjustedTithi - 1]
 
   return {
     number: tithi,
     adjustedNumber: adjustedTithi,
     paksha: tithi <= 15 ? 'थ्व' : 'गा',
-    name: TITHI_NAMES[adjustedTithi - 1],
+    name: name,
   }
 }
 
