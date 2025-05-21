@@ -1,6 +1,6 @@
 {
   "name": "nepal-sambat",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "A Vue 3 component for Nepal Sambat calendar conversion",
   "type": "module",
   "main": "dist/nepal-sambat.umd.js",
