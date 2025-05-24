@@ -2,7 +2,13 @@
   "name": "nepal-sambat",
   "version": "2.1.4",
   "description": "A Vue 3 component for Nepal Sambat calendar conversion",
-  "repository": "https://github.com/Gagan9841/nepal-sambat-converter",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Gagan9841/nepal-sambat-converter.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "type": "module",
   "main": "dist/nepal-sambat.umd.js",
   "module": "dist/nepal-sambat.es.js",
