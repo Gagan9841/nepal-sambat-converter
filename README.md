@@ -46,7 +46,7 @@ const customDate = ref(new Date(2024, 3, 14))
 ```typescript
 import { convertToNSDate } from 'nepal-sambat'
 
-const date = new Date('2024-03-14')
+const date = new Date(2024,3,14)
 const nsDate = convertToNSDate(date)
 
 console.log(nsDate)
