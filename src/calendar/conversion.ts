@@ -70,15 +70,25 @@ export function calculateNSYear(jd: number, nsMonth: number): number {
  * The Tithi is then calculated by dividing the elongation by 12 and adding 1.
  * If the resulting Tithi exceeds 30, it is reset to 1.
  */
-export function calculateTithi(jd: number): number {
+function calculateTithi(jd: number): number {
   const sunriseJD = getSunriseJD(jd)
-  const lunarLong = getLunarLongitude(sunriseJD)
-  const solarLong = getSolarLongitude(sunriseJD)
+  // const lunarLong = getLunarLongitude(sunriseJD)
+  // const solarLong = getSolarLongitude(sunriseJD)
 
-  const elongation = (lunarLong - solarLong + 360) % 360
-  const tithi = Math.ceil(elongation / 12)
+  const lunarLongAtSunrise = getLunarLongitude(sunriseJD)
+  const solarLongAtSunrise = getSolarLongitude(sunriseJD)
+  const elongationAtSunrise = (lunarLongAtSunrise - solarLongAtSunrise + 360) % 360
+  const tithiAtSunrise = Math.ceil(elongationAtSunrise / 12)
 
-  return tithi > 30 ? 1 : tithi
+  const lunarLongAtMidnight = getLunarLongitude(jd + 0.95)
+  const solarLongAtMidnight = getSolarLongitude(jd + 0.95)
+  const elongationAtMidnight = (lunarLongAtMidnight - solarLongAtMidnight + 360) % 360
+  const tithiAtMidnight = Math.ceil(elongationAtMidnight / 12)
+
+  if (tithiAtMidnight > tithiAtSunrise) {
+    return tithiAtMidnight
+  }
+  return tithiAtSunrise
 }
 
 /**
@@ -141,6 +151,14 @@ export function convertToNSMonth(year: number, month: number, day: number): NSMo
 }
 
 /**
+ * Calculates weekday (1=Sunday, ..., 7=Saturday)
+ */
+function getWeekday(jd: number): number {
+  const z = Math.floor(jd + 1.5)
+  return ((z % 7) + 7) % 7 || 7
+}
+
+/**
  * Converts a given Gregorian date to the corresponding Tithi in the Nepali calendar.
  *
  * @param year - The year of the Gregorian date.
@@ -155,6 +173,10 @@ export function convertToNSMonth(year: number, month: number, day: number): NSMo
 export function convertToTithi(year: number, month: number, day: number): NSTithi {
   const jd = gregorianToJD(year, month, day)
   const tithi = calculateTithi(jd)
+  const prevTithi = calculateTithi(jd - 1)
+  let tithiType = '0'
+  if (tithi === prevTithi) tithiType = '8'
+  else if (tithi >= prevTithi + 2) tithiType = '9'
   const adjustedTithi = ((tithi - 1) % 15) + 1
   const paksha = tithi <= 15 ? 'थ्व' : 'गा'
   const name = adjustedTithi === 15 && paksha === 'गा' ? 'अम्माई' : TITHI_NAMES[adjustedTithi - 1]
@@ -162,8 +184,9 @@ export function convertToTithi(year: number, month: number, day: number): NSTith
   return {
     number: tithi,
     adjustedNumber: adjustedTithi,
-    paksha: tithi <= 15 ? 'थ्व' : 'गा',
-    name: name,
+    paksha,
+    name,
+    type: tithiType,
   }
 }
 
@@ -217,6 +240,14 @@ export function convertToNSDate(year: number, month: number, day: number): NSDat
  * @param date - The NSDate object to format.
  * @returns A string representing the formatted NSDate.
  */
-export function formatNSDate(date: NSDate): string {
-  return `${date.nsYear} ${date.month.nepaliName}${date.tithi.paksha} ${date.tithi.name} - ${date.tithi.adjustedNumber}`
+export function formatNSDate(date: NSDate): { numerical: string; readable: string } {
+  const monthSuffix = date.month.anala ? '3' : date.month.nhala ? '4' : '0'
+  const paksha = date.tithi.paksha === 'थ्व' ? '1' : '2'
+  const tithiPadded = date.tithi.adjustedNumber.toString().padStart(2, '0')
+  const weekday = getWeekday(date.julianDay)
+
+  return {
+    numerical: `${date.nsYear}.${date.month.number}${monthSuffix}${paksha}.${tithiPadded}${date.tithi.type}${weekday}`,
+    readable: `${date.nsYear} ${date.month.nepaliName}${date.tithi.paksha} ${date.tithi.name} - ${date.tithi.adjustedNumber}`,
+  }
 }

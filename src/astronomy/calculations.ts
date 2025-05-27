@@ -103,23 +103,27 @@ export function getSolarLongitude(jd: number): number {
  */
 export function getLunarLongitude(jd: number): number {
   const T = (jd - J2000) / 36525
-  const L = LUNAR_CONSTANTS.L0 + LUNAR_CONSTANTS.L1 * T
-  const D = L - SOLAR_CONSTANTS.L0 - SOLAR_CONSTANTS.L1 * T
-  const M = SOLAR_CONSTANTS.M0 + SOLAR_CONSTANTS.M1 * T
-  const Mp = L - LUNAR_CONSTANTS.P0 - LUNAR_CONSTANTS.P1 * T
-  const F = LUNAR_CONSTANTS.N0 + LUNAR_CONSTANTS.N1 * T
+  const L = (LUNAR_CONSTANTS.L0 + LUNAR_CONSTANTS.L1 * T) % 360
+  const D = (L - SOLAR_CONSTANTS.L0 - SOLAR_CONSTANTS.L1 * T) % 360
+  const M = (SOLAR_CONSTANTS.M0 + SOLAR_CONSTANTS.M1 * T) % 360
+  const Mp = (L - LUNAR_CONSTANTS.P0 - LUNAR_CONSTANTS.P1 * T) % 360
+  const F = (LUNAR_CONSTANTS.N0 + LUNAR_CONSTANTS.N1 * T) % 360
 
-  const Ev = LUNAR_CONSTANTS.EVECTION * Math.sin(2 * (D - Mp) * DEG_TO_RAD)
+  const Ev = LUNAR_CONSTANTS.EVECTION * Math.sin(2 * D * DEG_TO_RAD - Mp * DEG_TO_RAD)
   const Ae = LUNAR_CONSTANTS.YEARLY_EQ * Math.sin(M * DEG_TO_RAD)
   const V = LUNAR_CONSTANTS.VARIATION * Math.sin(2 * D * DEG_TO_RAD)
-  const A1 = 0.114 * Math.sin((2 * D - Mp) * DEG_TO_RAD)
-  const A2 = 0.1858 * Math.sin(F * DEG_TO_RAD)
-  // Additional terms (from Meeus)
-  const A3 = 0.37 * Math.sin((2 * D + Mp) * DEG_TO_RAD)
-  const A4 = 0.2 * Math.sin(2 * F * DEG_TO_RAD)
-  const A5 = 0.17 * Math.sin((2 * D - M) * DEG_TO_RAD)
 
-  let longitude = (L + Ev - Ae + V + A1 + A2 + A3 + A4 + A5) % 360
+  const A1 = 0.1858 * Math.sin(F * DEG_TO_RAD)
+  const A2 = 0.114 * Math.sin((2 * D - Mp) * DEG_TO_RAD)
+  const A3 = 0.0588 * Math.sin((2 * D - 2 * M) * DEG_TO_RAD)
+  const A4 = 0.0572 * Math.sin((2 * D - M - Mp) * DEG_TO_RAD)
+  const A5 = 0.0533 * Math.sin((2 * D + Mp) * DEG_TO_RAD)
+  const A6 = 0.0458 * Math.sin((2 * D - M) * DEG_TO_RAD)
+  const A7 = 0.0409 * Math.sin((Mp - M) * DEG_TO_RAD)
+  const A8 = 0.0347 * Math.sin((D + Mp) * DEG_TO_RAD)
+  const A9 = 0.0304 * Math.sin((2 * D + M) * DEG_TO_RAD)
+
+  let longitude = (L + Ev - Ae + V + A1 + A2 + A3 + A4 + A5 + A6 + A7 + A8 + A9) % 360
   if (longitude < 0) longitude += 360
   return longitude
 }

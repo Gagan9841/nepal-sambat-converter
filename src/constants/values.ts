@@ -28,12 +28,12 @@ export const KATHMANDU_LAT = 27.7172 // Latitude for Kathmandu
  * @property {number} PARALLACTIC - Parallactic inequality term in the Moon's equation of center (degrees).
  */
 export const LUNAR_CONSTANTS: LunarConstants = {
-  L0: 218.3164477,
-  P0: 83.353451,
-  N0: 125.044522,
-  L1: 481267.88123421,
-  P1: 4069.0137287,
-  N1: -1934.136261,
+  L0: 218.3164591,
+  P0: 83.353243,
+  N0: 125.044555,
+  L1: 481267.88134236,
+  P1: 4069.0136776,
+  N1: -1934.1361849,
   EVECTION: 1.2739,
   VARIATION: 0.6583,
   YEARLY_EQ: 0.1858,

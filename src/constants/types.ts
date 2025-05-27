@@ -57,7 +57,8 @@ export interface NSTithi {
   adjustedNumber: number
   paksha: string
   name: string
-  type?: number // 0: normal, 8: Anala, 9: Nhalā
+  type?: number | string // '0' for normal, '8' for Anala, '9' for Nhalā
+  // '8' indicates Anala (leap month), '9' indicates Nhalā (skipped month)
 }
 
 /**
