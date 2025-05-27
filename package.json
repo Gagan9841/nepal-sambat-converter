@@ -1,6 +1,6 @@
 {
   "name": "nepal-sambat",
-  "version": "2.1.5",
+  "version": "2.1.6",
   "description": "A Vue 3 component for Nepal Sambat calendar conversion",
   "repository": {
     "type": "git",
