@@ -1,7 +1,11 @@
 {
   "name": "nepal-sambat",
-  "version": "2.1.3",
+  "version": "2.1.5",
   "description": "A Vue 3 component for Nepal Sambat calendar conversion",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gagan9841/nepal-sambat-converter.git"
+  },
   "type": "module",
   "main": "dist/nepal-sambat.umd.js",
   "module": "dist/nepal-sambat.es.js",
@@ -23,9 +27,9 @@
   },
   "keywords": [
     "nepal-sambat",
+    "nepal sambat converter",
+    "ad to nepal sambat",
     "calendar",
-    "vue3",
-    "typescript",
     "nepal-sambat-converter",
     "AD to NS"
   ],

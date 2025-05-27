@@ -4,11 +4,23 @@
 
 > The date conversion and astronomical calculations in this component are heavily based on the methodologies outlined in https://nsapi.spiralogics.net/nsalgorithm.pdf.
 
-A Vue 3 component for displaying and converting dates to the Nepal Sambat calendar system.
+A Vue 3 component for displaying and converting dates to the Nepal Sambat calendar system. This package provides both a Vue component for easy integration and utility functions for date conversion.
+
+## Features
+
+- Convert Gregorian dates to Nepal Sambat calendar
+- Display NS year, month, and tithi
+- Show astronomical data (solar and lunar longitudes)
+- Fully typed with TypeScript
+- Vue 3 compatible
+- Responsive design
+- Comprehensive test coverage
+- CI/CD pipeline with GitHub Actions
 
 ## Installation
 
 ```bash
+# Using npm
 npm install nepal-sambat
 ```
 
@@ -44,12 +56,39 @@ const customDate = ref(new Date(2024, 3, 14))
 ### Using Conversion Functions
 
 ```typescript
-import { convertToNSDate } from 'nepal-sambat'
+import {
+  convertToNSDate,
+  convertToNSYear,
+  convertToNSMonth,
+  convertToTithi,
+  formatNSDate,
+} from 'nepal-sambat'
 
-const date = new Date('2024-03-14')
-const nsDate = convertToNSDate(date)
+// Example 1: Convert current date
+const today = new Date()
+const date = convertToNSDate(today.getFullYear(), today.getMonth() + 1, today.getDate())
+console.log(formatNSDate(date))
 
-console.log(nsDate)
+// Example 2: Get individual components for a date
+const year = convertToNSYear(2024)
+const month = convertToNSMonth(2024, 4, 14)
+const tithi = convertToTithi(2024, 4, 14)
+console.log(`Year: ${year}, Month: ${month.nepaliName}, Tithi: ${tithi.name}`)
+
+// Example 3: Convert a custom date
+const customDate = new Date(2024, 3, 14)
+const customNSDate = convertToNSDate(
+  customDate.getFullYear(),
+  customDate.getMonth() + 1,
+  customDate.getDate(),
+)
+console.log(formatNSDate(customNSDate))
+
+// Example 4: Convert a date directly with year, month, day
+const date2 = convertToNSDate(2024, 3, 14)
+console.log(formatNSDate(date2))
+
+// Example output format:
 // {
 //   nsYear: 1144,
 //   month: {
@@ -73,20 +112,21 @@ console.log(nsDate)
 // }
 ```
 
-## Features
-
-- Convert Gregorian dates to Nepal Sambat calendar
-- Display NS year, month, and tithi
-- Show astronomical data (solar and lunar longitudes)
-- Fully typed with TypeScript
-- Vue 3 compatible
-- Responsive design
-
 ## Props
 
 | Prop | Type | Default    | Description                    |
 | ---- | ---- | ---------- | ------------------------------ |
 | date | Date | new Date() | Date to convert to NS calendar |
+
+## Technical Details
+
+The package uses advanced astronomical calculations to ensure accurate date conversions:
+
+- Solar and lunar longitude calculations
+- Julian Day Number conversions
+- Astronomical corrections for improved accuracy
+- TypeScript for type safety and better developer experience
+- Vue 3 compatibility for seamless integration
 
 ## Development
 
@@ -102,7 +142,18 @@ npm run build
 
 # Run tests
 npm test
+
+# Run tests for conversion
+npm run convert
 ```
+
+## Testing Phase
+
+This project is currently in testing phase. We need help with:
+
+- Testing date conversions across different years
+- Verifying astronomical calculations
+- Performance optimization
 
 ## License
 
